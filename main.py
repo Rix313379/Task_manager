@@ -1,3 +1,7 @@
+import pandas as pd
+import numpy as np
+import datetime as dt
+
 def afisare_meniu():
     print("\n--- Meniu Principal ---")
     print("1. Adăugare categorii")
@@ -29,7 +33,23 @@ def afisare_meniu_filtrare():
     print("3. Filtrare după persoana responsabilă")
     print("4. Filtrare după categorie")
 
+# ##### 1. Adaugare categorii ####################################################
+def adaugare_categorii():
+    categorie_noua = input("\nIntroduceti o categorie noua:\n")
 
+    with open('categorii.csv', newline='') as file_obj:
+        categories_list = file_obj.read()
+        print(categories_list.lower())
+
+    if categorie_noua.lower() in categories_list.lower():
+        print(
+            f"\n********************************\nExista deja aceasta categorie \n********************************\n")
+    else:
+        with open('categorii.csv', 'a', newline='') as file_obj:
+            file_obj.write(categorie_noua.lower() + '\n')
+
+
+# ##### Main ####################################################
 def main():
     while True:
         afisare_meniu()
@@ -37,7 +57,7 @@ def main():
 
         if optiune == "1":
             # Adăugare categorii
-            adaugare_categorii(categorii)
+            adaugare_categorii()
         elif optiune == "2":
             # Listare taskuri
             print("Listarea taskurilor...")
@@ -67,3 +87,6 @@ def main():
             break
         else:
             print("Opțiune invalidă, vă rugăm să alegeți din nou.")
+
+
+main()
