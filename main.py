@@ -49,6 +49,63 @@ def adaugare_categorii():
             file_obj.write(categorie_noua.lower() + '\n')
 
 
+# ###### 4. Filtrare task-uri ####################################################
+def filter_tasks(opt: int):
+    tasks_df = pd.read_csv('taskuri.csv', index_col=False)
+
+    selected_col = tasks_df.columns[opt]
+    date_cols = get_datetype_columns(tasks_df)
+    tasks_df_filtered = (
+        filter_datetype_data(selected_col, tasks_df)
+        if selected_col in date_cols
+        else filter_texttype_data(selected_col, tasks_df)
+    )
+
+    return (
+        "Nu s-a gasit nici un rezultat"
+        if tasks_df_filtered.empty
+        else tasks_df_filtered
+    )
+
+
+def get_datetype_columns(data):
+    headers = data.columns.tolist()
+    date_cols = []
+
+    for col in headers:
+        if pd.to_datetime(data[col], format="%Y-%m-%d", errors='coerce').notna().any():
+            date_cols.append(col)
+
+    return date_cols
+
+
+def filter_texttype_data(col_name, data):
+    searched_term = input('\nIntrodu termenul cautat: ')
+    return data[data[col_name].str.contains(searched_term, case=False)]
+
+
+def filter_datetype_data(col_name, data):
+    from_date = input('\nDe la data (apasa enter daca nu vrei sa setezi nici o data de inceput): ')
+    to_date = input('Pana la data (apasa enter daca nu vrei sa setezi nici o data de sfarsit): ')
+
+    # set the default date in case the from and to date are not provided
+    if from_date == '':
+        from_date = '1900-01-01'
+
+    if to_date == '':
+        to_date = dt.datetime.today()
+
+    # convert the dates in format necessary for DataFrame operations
+    from_date_64 = np.datetime64(from_date)
+    to_date_64 = np.datetime64(to_date)
+
+    # convert the data in the selected column to date type
+    data[col_name] = pd.to_datetime(data[col_name], errors='coerce')
+
+    # return the filtered result between the given dates
+    return data[(data[col_name] >= from_date_64) & (data[col_name] <= to_date_64)]
+
+
 # ##### Main ####################################################
 def main():
     while True:
@@ -70,6 +127,11 @@ def main():
             afisare_meniu_filtrare()
             opt_filtrare = input("Alegeți o opțiune de filtrare (1-4): ")
             # Apelați funcțiile de filtrare pe baza opțiunii
+
+            rezultat_filtrare = filter_tasks(int(opt_filtrare))
+            print(
+                f"\n********************************\nRESULT: \n{rezultat_filtrare} \n********************************\n")
+
         elif optiune == "5":
             # Adăugare task nou
             print("Adăugare task nou...")
