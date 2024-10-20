@@ -48,10 +48,19 @@ def adaugare_categorii():
         with open('categorii.csv', 'a', newline='') as file_obj:
             file_obj.write(categorie_noua.lower() + '\n')
 
+# ###### 2. Listare task-uri ####################################################
+def listare_taskuri(file):
+    try:
+        df = pd.read_csv(file)
+        df_sorted = df.sort_values(by='category')
+        print(
+            f"\n********************************\n{df_sorted} \n********************************\n")
+    except Exception as e:
+        print(f"An error has occurred: {e}")
 
 # ###### 4. Filtrare task-uri ####################################################
-def filter_tasks(opt: int):
-    tasks_df = pd.read_csv('taskuri.csv', index_col=False)
+def filter_tasks(opt: int, file_name):
+    tasks_df = pd.read_csv(file_name, index_col=False)
 
     selected_col = tasks_df.columns[opt]
     date_cols = get_datetype_columns(tasks_df)
@@ -108,6 +117,7 @@ def filter_datetype_data(col_name, data):
 
 # ##### Main ####################################################
 def main():
+    task_file = 'taskuri.csv'
     while True:
         afisare_meniu()
         optiune = input("Alegeți o opțiune (1-8): ")
@@ -119,6 +129,7 @@ def main():
             # Listare taskuri
             print("Listarea taskurilor...")
             # Aici se va apela o funcție de listare a taskurilor
+            listare_taskuri(task_file)
         elif optiune == "3":
             afisare_meniu_sortare()
             opt_sortare = input("Alegeți o opțiune de sortare (1-8): ")
@@ -128,7 +139,7 @@ def main():
             opt_filtrare = input("Alegeți o opțiune de filtrare (1-4): ")
             # Apelați funcțiile de filtrare pe baza opțiunii
 
-            rezultat_filtrare = filter_tasks(int(opt_filtrare))
+            rezultat_filtrare = filter_tasks(int(opt_filtrare), task_file)
             print(
                 f"\n********************************\nRESULT: \n{rezultat_filtrare} \n********************************\n")
 
