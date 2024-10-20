@@ -115,9 +115,40 @@ def filter_datetype_data(col_name, data):
     return data[(data[col_name] >= from_date_64) & (data[col_name] <= to_date_64)]
 
 
+# ###### 7. Stergere task-uri ####################################################
+def remove_task(file_name):
+    tasks_df = pd.read_csv(file_name)
+    value_to_remove = int(input('Id-ul task-ului de sters: '))
+    row_to_remove = tasks_df[tasks_df['id'] == value_to_remove]
+
+    if row_to_remove.empty:
+        print(
+            f"\n*******************\nNu exista task-ul cu id-ul introdus! \n*******************\n")
+    else:
+        print(
+            f"\n********************************\nTask-ul pe care vrei sa il stergi este: \n{row_to_remove} \n********************************\n")
+        delete_agreed = confirm_delete()
+
+        if delete_agreed:
+            tasks_df_updated = tasks_df[tasks_df['id'] != value_to_remove]
+            tasks_df_updated.to_csv(file_name, index=False)
+            print(f'Task-ul cu id-ul {value_to_remove} a fost sters.')
+
+
+def confirm_delete():
+    while True:
+        confirmation = input('Confirma stergerea acestui task (y/n): ')
+
+        if confirmation.upper() == 'Y':
+            return True
+
+        if confirmation.upper() == 'N':
+            return False
+
+
 # ##### Main ####################################################
 def main():
-    task_file = 'taskuri.csv'
+    tasks_file = 'taskuri.csv'
     while True:
         afisare_meniu()
         optiune = input("Alegeți o opțiune (1-8): ")
@@ -129,7 +160,7 @@ def main():
             # Listare taskuri
             print("Listarea taskurilor...")
             # Aici se va apela o funcție de listare a taskurilor
-            listare_taskuri(task_file)
+            listare_taskuri(tasks_file)
         elif optiune == "3":
             afisare_meniu_sortare()
             opt_sortare = input("Alegeți o opțiune de sortare (1-8): ")
@@ -139,7 +170,7 @@ def main():
             opt_filtrare = input("Alegeți o opțiune de filtrare (1-4): ")
             # Apelați funcțiile de filtrare pe baza opțiunii
 
-            rezultat_filtrare = filter_tasks(int(opt_filtrare), task_file)
+            rezultat_filtrare = filter_tasks(int(opt_filtrare), tasks_file)
             print(
                 f"\n********************************\nRESULT: \n{rezultat_filtrare} \n********************************\n")
 
@@ -153,8 +184,8 @@ def main():
             # Aici se va apela o funcție de editare task
         elif optiune == "7":
             # Ștergere task
-            print("Ștergere task...")
             # Aici se va apela o funcție de ștergere task
+            remove_task(tasks_file)
         elif optiune == "8":
             print("Ieșire din program.")
             break
