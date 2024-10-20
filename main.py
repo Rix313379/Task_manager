@@ -114,6 +114,57 @@ def filter_datetype_data(col_name, data):
     # return the filtered result between the given dates
     return data[(data[col_name] >= from_date_64) & (data[col_name] <= to_date_64)]
 
+# ###### 5. Adaugare task-uri ####################################################
+
+def category_exists(category, file = 'categorii.csv'):
+    df = pd.read_csv(file)
+    return category in df
+    
+def task_exists(task, file = 'taskuri.csv'):
+    df = pd.read_csv(file)
+    return task in df['name'].values
+
+def get_new_id(file='taskuri.csv'):
+    df = pd.read_csv(file)
+    return df['id'].max() + 1
+
+def add_new_tasks():
+
+    task = input("Please insert your task: ")
+    
+    if task_exists(task):
+        print(f'"{task}" already exists')
+    else:
+        df = pd.read_csv('taskuri.csv')
+        
+        category = input("Please insert your category: ")
+    
+        if not category_exists(category):
+            print("This category is not in the database")
+            return # Ieșim din funcție dacă formatul nu este valid
+        
+        deadline = input("Please insert the deadline (format: dd.mm.yyyy hh:mm): ")
+        person_responsible = input("Please insert the person responsible for this task: ")
+        
+        try:
+            deadline_dt = dt.datetime.strptime(deadline, "%d.%m.%Y %H:%M")
+        except ValueError:
+            print("Incorrect date format, please retry! ")
+            return  
+            
+        
+        new_task = {
+            'id': get_new_id(),
+            'name': task.strip(),
+            'max_date': deadline_dt.strftime('%Y-%m-%d'),  # Salvăm data în format YYYY-MM-DD
+            'assignee': person_responsible.strip(),
+            'category': category.strip()
+        }
+        
+        df = df.append(new_task, ignore_index=True)
+        df.to_csv('taskuri.csv', index = False)
+        
+        print(f' "{task}" in "{category}" has been added for "{person_responsible}", the date limit is: "{deadline}". ') 
 
 # ###### 7. Stergere task-uri ####################################################
 def remove_task(file_name):
@@ -176,8 +227,9 @@ def main():
 
         elif optiune == "5":
             # Adăugare task nou
-            print("Adăugare task nou...")
             # Aici se va apela o funcție de adăugare task
+            add_new_tasks()
+            
         elif optiune == "6":
             # Editare task
             print("Editare task...")

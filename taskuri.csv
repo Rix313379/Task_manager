@@ -1,4 +1,4 @@
-﻿id,name,max_date,assignee,category
+id,name,max_date,assignee,category
 1,task1,2024-10-16,Iulian,categ1
 2,task2,2024-10-03,Violeta,categ2
 3,task3,2024-09-16,Roberto,categ1
