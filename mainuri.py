@@ -37,7 +37,8 @@ def main():
 
         if optiune == "1":
             # Adăugare categorii
-            adaugare_categorii(categorii)
+            #adaugare_categorii(categorii)
+            pass
         elif optiune == "2":
             # Listare taskuri
             print("Listarea taskurilor...")
