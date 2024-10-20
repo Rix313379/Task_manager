@@ -1,9 +1,5 @@
-Nume,Varsta,Salariu
-Ana,25.0,50000.0
-Bogdan,30.0,60000.0
-Ana,25.0,60000.0
-,23.0,
-Cristina,22.0,10000.0
-Andrei,24.0,450000.0
-David,35.0,70000.0
-Ana,,50000.0
+task,data_limita,persoana_responsabila,categorie
+Finalizare raport,2024-12-01,Ion Popescu,Work
+Întâlnire echipă,2024-10-25,Andrei Ionescu,Work
+Cumpărături,2024-10-20,Elena Popa,Personal
+Vacanță,2024-12-15,Mihai Georgescu,Personal
