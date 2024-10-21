@@ -302,8 +302,8 @@ def main():
             
         elif optiune == "6":
             # Editare task
-            print("Editare task...")
             # Aici se va apela o funcție de editare task
+            edit_task(tasks_file)
         elif optiune == "7":
             # Ștergere task
             # Aici se va apela o funcție de ștergere task
