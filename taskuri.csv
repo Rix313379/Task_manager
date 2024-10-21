@@ -1,8 +1,7 @@
 id,name,max_date,assignee,category
-1,task1,2024-10-16,Iulian,categ1
-2,task2,2024-10-03,Violeta,categ2
-3,task3,2024-09-16,Roberto,categ1
-4,task10,2024-09-16,Adrian,categ1
-5,task21,2024-04-10,Alex,categ3
-6,task23,2023-01-03,Cristi,food
-7,ceva,2010-06-30,Tavis,masini
+1,task1,16.10.2024 00:00,Iulian,categ1
+2,task2,03.10.2024 00:00,Violeta,categ2
+3,task3,16.09.2024 00:00,Roberto,categ1
+4,task10,16.09.2024 00:00,Adrian,categ1
+5,task21,10.04.2024 00:00,Alex,categ3
+6,task22,01.01.2023 00:00,Cristi,food

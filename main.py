@@ -82,7 +82,7 @@ def get_datetype_columns(data):
     date_cols = []
 
     for col in headers:
-        if pd.to_datetime(data[col], format="%Y-%m-%d", errors='coerce').notna().any():
+        if pd.to_datetime(data[col], format="%d.%m.%Y %H:%M", errors='coerce').notna().any():
             date_cols.append(col)
 
     return date_cols
@@ -99,20 +99,20 @@ def filter_datetype_data(col_name, data):
 
     # set the default date in case the from and to date are not provided
     if from_date == '':
-        from_date = '1900-01-01'
+        from_date = '01.01.1900 00:00'
 
     if to_date == '':
         to_date = dt.datetime.today()
 
-    # convert the dates in format necessary for DataFrame operations
-    from_date_64 = np.datetime64(from_date)
-    to_date_64 = np.datetime64(to_date)
+    # convert the dates in datetime format
+    from_date_dt = pd.to_datetime(from_date, format='%d.%m.%Y %H:%M')
+    to_date_dt = pd.to_datetime(to_date, format='%d.%m.%Y %H:%M')
 
     # convert the data in the selected column to date type
-    data[col_name] = pd.to_datetime(data[col_name], errors='coerce')
+    data[col_name] = pd.to_datetime(data[col_name], format='%d.%m.%Y %H:%M', errors='coerce')
 
     # return the filtered result between the given dates
-    return data[(data[col_name] >= from_date_64) & (data[col_name] <= to_date_64)]
+    return data[(data[col_name] >= from_date_dt) & (data[col_name] <= to_date_dt)]
 
 # ###### 5. Adaugare task-uri ####################################################
 
