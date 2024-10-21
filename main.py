@@ -122,7 +122,7 @@ def category_exists(category, file = 'categorii.csv'):
     
 def task_exists(task, file = 'taskuri.csv'):
     df = pd.read_csv(file)
-    return task in df['name'].values
+    return task.strip().lower() in df['name'].str.lower().values
 
 def get_new_id(file='taskuri.csv'):
     df = pd.read_csv(file)
@@ -156,7 +156,7 @@ def add_new_tasks():
         new_task = {
             'id': get_new_id(),
             'name': task.strip(),
-            'max_date': deadline_dt.strftime('%Y-%m-%d'),  # Salvăm data în format YYYY-MM-DD
+            'max_date': deadline_dt.strftime('%d.%m.%Y %H:%M'),  # Salvăm data în format dd.mm.YYYY HH:MM
             'assignee': person_responsible.strip(),
             'category': category.strip()
         }
