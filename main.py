@@ -1,6 +1,7 @@
 import pandas as pd
-import numpy as np
+# import numpy as np
 import datetime as dt
+
 
 def afisare_meniu():
     print("\n--- Meniu Principal ---")
@@ -33,6 +34,7 @@ def afisare_meniu_filtrare():
     print("3. Filtrare după persoana responsabilă")
     print("4. Filtrare după categorie")
 
+
 # ##### 1. Adaugare categorii ####################################################
 def adaugare_categorii():
     categorie_noua = input("\nIntroduceti o categorie noua:\n")
@@ -48,6 +50,7 @@ def adaugare_categorii():
         with open('categorii.csv', 'a', newline='') as file_obj:
             file_obj.write(categorie_noua.lower() + '\n')
 
+
 # ###### 2. Listare task-uri ####################################################
 def listare_taskuri(file):
     try:
@@ -57,6 +60,31 @@ def listare_taskuri(file):
             f"\n********************************\n{df_sorted} \n********************************\n")
     except Exception as e:
         print(f"An error has occurred: {e}")
+
+
+# ###### 3. Sortare task-uri ####################################################
+def sort_task(file, sort_type):
+    df = pd.read_csv(file)
+    if sort_type == 1:
+        sdf = df.sort_values(by=['name'])
+    elif sort_type == 2:
+        sdf = df.sort_values(by=['name'], ascending=False)
+    elif sort_type == 3:
+        df['max_date'] = pd.to_datetime(df['max_date'], format='%d.%m.%Y %H:%M', errors='coerce')
+        sdf = df.sort_values(by=['max_date'])
+    elif sort_type == 4:
+        df['max_date'] = pd.to_datetime(df['max_date'], format='%d.%m.%Y %H:%M', errors='coerce')
+        sdf = df.sort_values(by=['max_date'], ascending=False)
+    elif sort_type == 5:
+        sdf = df.sort_values(by=['assignee'])
+    elif sort_type == 6:
+        sdf = df.sort_values(by=['assignee'], ascending=False)
+    elif sort_type == 7:
+        sdf = df.sort_values(by=['category'])
+    elif sort_type == 8:
+        sdf = df.sort_values(by=['category'], ascending=False)
+    return sdf
+
 
 # ###### 4. Filtrare task-uri ####################################################
 def filter_tasks(opt: int, file_name):
@@ -114,45 +142,47 @@ def filter_datetype_data(col_name, data):
     # return the filtered result between the given dates
     return data[(data[col_name] >= from_date_dt) & (data[col_name] <= to_date_dt)]
 
+
 # ###### 5. Adaugare task-uri ####################################################
 
-def category_exists(category, file = 'categorii.csv'):
+def category_exists(category, file='categorii.csv'):
     df = pd.read_csv(file)
     return category in df
-    
-def task_exists(task, file = 'taskuri.csv'):
+
+
+def task_exists(task, file='taskuri.csv'):
     df = pd.read_csv(file)
     return task.strip().lower() in df['name'].str.lower().values
+
 
 def get_new_id(file='taskuri.csv'):
     df = pd.read_csv(file)
     return df['id'].max() + 1
 
-def add_new_tasks():
 
+def add_new_tasks():
     task = input("Please insert your task: ")
-    
+
     if task_exists(task):
         print(f'"{task}" already exists')
     else:
         df = pd.read_csv('taskuri.csv')
-        
+
         category = input("Please insert your category: ")
-    
+
         if not category_exists(category):
             print("This category is not in the database")
-            return # Ieșim din funcție dacă formatul nu este valid
-        
+            return  # Ieșim din funcție dacă formatul nu este valid
+
         deadline = input("Please insert the deadline (format: dd.mm.yyyy hh:mm): ")
         person_responsible = input("Please insert the person responsible for this task: ")
-        
+
         try:
             deadline_dt = dt.datetime.strptime(deadline, "%d.%m.%Y %H:%M")
         except ValueError:
             print("Incorrect date format, please retry! ")
-            return  
-            
-        
+            return
+
         new_task = {
             'id': get_new_id(),
             'name': task.strip(),
@@ -160,15 +190,14 @@ def add_new_tasks():
             'assignee': person_responsible.strip(),
             'category': category.strip()
         }
-        
+
         df = df.append(new_task, ignore_index=True)
-        df.to_csv('taskuri.csv', index = False)
-        
-        print(f' "{task}" in "{category}" has been added for "{person_responsible}", the date limit is: "{deadline}". ') 
+        df.to_csv('taskuri.csv', index=False)
 
+        print(f' "{task}" in "{category}" has been added for "{person_responsible}", the date limit is: "{deadline}". ')
 
+    # ###### 6. Editare task-uri ####################################################
 
-# ###### 6. Editare task-uri ####################################################
 
 def edit_task(file_name):
     # Citim taskurile din fișierul CSV
@@ -284,8 +313,10 @@ def main():
             listare_taskuri(tasks_file)
         elif optiune == "3":
             afisare_meniu_sortare()
-            opt_sortare = input("Alegeți o opțiune de sortare (1-8): ")
+            opt_sortare = int(input("Alegeți o opțiune de sortare (1-8): "))
             # Apelați funcțiile de sortare pe baza opțiunii
+            rezultat_sortare = sort_task(tasks_file, opt_sortare)
+            print(rezultat_sortare)
         elif optiune == "4":
             afisare_meniu_filtrare()
             opt_filtrare = input("Alegeți o opțiune de filtrare (1-4): ")
@@ -299,7 +330,7 @@ def main():
             # Adăugare task nou
             # Aici se va apela o funcție de adăugare task
             add_new_tasks()
-            
+
         elif optiune == "6":
             # Editare task
             # Aici se va apela o funcție de editare task
