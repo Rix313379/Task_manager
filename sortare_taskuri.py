@@ -22,8 +22,10 @@ def sort_task(file, sort_type):
     elif sort_type == 2:
         sdf = df.sort_values(by=['name'], ascending=False)
     elif sort_type == 3:
+        df['max_date'] = pd.to_datetime(df['max_date'], format='%d.%m.%Y %H:%M', errors='coerce')
         sdf = df.sort_values(by=['max_date'])
     elif sort_type == 4:
+        df['max_date'] = pd.to_datetime(df['max_date'], format='%d.%m.%Y %H:%M', errors='coerce')
         sdf = df.sort_values(by=['max_date'], ascending=False)
     elif sort_type == 5:
         sdf = df.sort_values(by=['assignee'])
@@ -35,4 +37,5 @@ def sort_task(file, sort_type):
         sdf = df.sort_values(by=['category'], ascending=False)
     return sdf
 
-print(sort_task("taskuri.csv", 8))
+
+print(sort_task("taskuri.csv", 4))

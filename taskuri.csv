@@ -1,7 +1,7 @@
 id,name,max_date,assignee,category
-1,task1,16.10.2024 00:00,Iulian,categ1
-2,task2,03.10.2024 00:00,Violeta,categ2
-3,task3,16.09.2024 00:00,Roberto,categ1
-4,task10,16.09.2024 00:00,Adrian,categ1
-5,task21,10.04.2024 00:00,Alex,categ3
-6,task22,01.01.2023 00:00,Cristi,food
+1,task 1,16.10.2024 00:00,Iulian,categ1
+2,task 2,03.10.2024 00:00,Violeta,categ2
+3,task 3,16.09.2024 00:00,Roberto,categ1
+4,task 10,16.09.2024 00:00,Adrian,categ1
+5,task 21,10.04.2024 00:00,Alex,categ3
+6,task 22,01.01.2023 00:00,Cristi,food
